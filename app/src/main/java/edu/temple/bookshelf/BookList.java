@@ -1,16 +1,28 @@
 package edu.temple.bookshelf;
 
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 
-//BookList is more or less a wrapper class for an ArrayList of book objects
+//BookList is more or less a wrapper class for an ArrayList of book objects, that I then
+//turned into an adapter class
 
-public class BookList
+public class BookList extends BaseAdapter
 {
     private ArrayList<Book> bookArray;
+    private Context context;
+    private LayoutInflater inflater;
 
-    public BookList()
+    public BookList(Context context, ArrayList<Book> bookArray)
     {
-        bookArray = new ArrayList<Book>();
+        this.context = context;
+        this.bookArray = bookArray;
+        inflater = LayoutInflater.from(context);
     }
 
     public void add(Book book)
@@ -31,5 +43,45 @@ public class BookList
     public int size()
     {
         return bookArray.size();
+    }
+
+    public ArrayList<Book> getBookArrayList()
+    {
+        return bookArray;
+    }
+
+    @Override
+    public int getCount()
+    {
+        return bookArray.size();
+    }
+
+    @Override
+    public Object getItem(int position)
+    {
+        return bookArray.get(position);
+    }
+
+    //Must be implemented, though we don't use it
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
+        //Inflate the convertView from the booklist fragment file
+        convertView = inflater.inflate(R.layout.booklist_fragment, null);
+
+        //Prep the Title Text
+        TextView title = convertView.findViewById(R.id.title);
+        title.setText(bookArray.get(position).getTitle());
+
+        //Prep the Author text
+        TextView author = convertView.findViewById(R.id.author);
+        author.setText(bookArray.get(position).getAuthor());
+
+        return convertView;
     }
 }
