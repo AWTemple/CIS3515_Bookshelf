@@ -5,10 +5,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class BookListFragment extends Fragment
 {
+    private ListView listView;
+    private BookList bookList;
+
     public BookListFragment()
     {
         //Required empty default constructor
@@ -19,27 +23,12 @@ public class BookListFragment extends Fragment
         return new BookListFragment();
     }
 
-    public static BookListFragment newInstance(BookList booklist)
+    public static BookListFragment newInstance(BookList booklist, ListView listView )
     {
-        BookListFragment blf = new BookListFragment();
-        Bundle args = new Bundle();
-        args.putParcelableArrayList("booklist", booklist.getBookArrayList());
-        blf.setArguments(args);
-        return blf;
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        // Inflate the layout for this fragment
-        View myfrag = inflater.inflate(R.layout.booklist_fragment, container, false);
-
-        TextView title = myfrag.findViewById(R.id.title);
-        TextView author = myfrag.findViewById(R.id.author);
-
-        title.setText("title");
-        author.setText("author");
-
+        BookListFragment myfrag = new BookListFragment();
+        myfrag.bookList = booklist;
+        myfrag.listView = listView;
+        myfrag.listView.setAdapter(booklist);
         return myfrag;
     }
 }

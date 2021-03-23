@@ -72,7 +72,7 @@ public class BookList extends BaseAdapter
     public View getView(int position, View convertView, ViewGroup parent)
     {
         //Inflate the convertView from the booklist fragment file
-        convertView = inflater.inflate(R.layout.booklist_fragment, null);
+        convertView = inflater.inflate(R.layout.booklist_fragment, parent, false);
 
         //Prep the Title Text
         TextView title = convertView.findViewById(R.id.title);
