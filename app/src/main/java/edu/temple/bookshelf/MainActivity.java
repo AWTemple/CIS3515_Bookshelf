@@ -43,13 +43,12 @@ public class MainActivity extends AppCompatActivity
         currBook = null;
 
         //Load booklist fragment by default
-        Fragment bookListFragment = BookListFragment.newInstance(myBooks, this);
-        loadFragment(R.id.booklist_fragment, bookListFragment, true);
+        loadFragment(R.id.booklist_fragment, BookListFragment.newInstance(myBooks, this), false);
 
         //If two panes, load details fragment as well
         currDetails = BookDetailsFragment.newInstance(currBook);
         if (twoPanes)
-            loadFragment(R.id.details_fragment, currDetails, true);
+            loadFragment(R.id.details_fragment, currDetails, false);
 
     }
 
@@ -64,6 +63,7 @@ public class MainActivity extends AppCompatActivity
         if(!twoPanes)
         {
             Fragment newFrag = BookDetailsFragment.newInstance(currBook);
+            currDetails = (BookDetailsFragment)newFrag;
             loadFragment(R.id.booklist_fragment, newFrag, true);
         }
         else //Otherwise we simply ask details fragment to update its book
@@ -90,19 +90,25 @@ public class MainActivity extends AppCompatActivity
     public void onConfigurationChanged(Configuration newConfig)
     {
         super.onConfigurationChanged(newConfig);
+        setContentView(R.layout.activity_main);
+        twoPanes = (findViewById(R.id.details_fragment) != null);
+
+        //Declare new instances because orientation changes cause massive glitches for some reason
+        currDetails = BookDetailsFragment.newInstance(currBook);
+        Fragment list = BookListFragment.newInstance(myBooks, this);
 
         //Switch to Landscape
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
+        if(twoPanes)
         {
-            twoPanes = true;
-            currDetails.displayBook(currBook);
+            loadFragment(R.id.booklist_fragment, list, false);
+            loadFragment(R.id.details_fragment, currDetails, false);
         }
-        else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
+        else
         {
-            twoPanes = false;
             if(currBook != null)
                 loadFragment(R.id.booklist_fragment, currDetails, true);
-
+            else
+                loadFragment(R.id.booklist_fragment, list, false);
         }
     }
 

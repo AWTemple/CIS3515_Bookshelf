@@ -31,6 +31,11 @@ public class BookDetailsFragment extends Fragment
         return myfrag;
     }
 
+    public void updateBook(Book book)
+    {
+        this.book = book;
+    }
+
     public void displayBook(Book book)
     {
         this.book = book;
