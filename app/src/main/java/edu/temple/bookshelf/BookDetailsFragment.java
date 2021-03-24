@@ -1,12 +1,17 @@
 package edu.temple.bookshelf;
 
 import android.app.Fragment;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
 public class BookDetailsFragment extends Fragment
 {
     private Book book;
+    TextView title, author;
 
     public BookDetailsFragment()
     {
@@ -28,10 +33,28 @@ public class BookDetailsFragment extends Fragment
 
     public void displayBook(Book book)
     {
-        TextView bigAuthor = getActivity().findViewById(R.id.bigauthor);
-        TextView bigTitle = getActivity().findViewById(R.id.bigtitle);
+        if (title != null && author != null)
+        {
+            title.setText(book.getTitle());
+            author.setText(book.getAuthor());
+        }
+    }
 
-        bigTitle.setText(book.getTitle());
-        bigAuthor.setText(book.getAuthor());
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View v = inflater.inflate(R.layout.details_fragment, null);
+        title = v.findViewById(R.id.bigtitle);
+        author = v.findViewById(R.id.bigauthor);
+        if(this.book != null)
+            this.displayBook(this.book);
+
+        return v;
     }
 }

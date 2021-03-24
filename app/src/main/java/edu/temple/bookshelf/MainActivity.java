@@ -2,9 +2,9 @@ package edu.temple.bookshelf;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,13 +12,18 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
 {
-    ListView listview;
+    BookList myBooks;
+    boolean twoPanes;
+    public Book currBook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.small_portrait);
+        setContentView(R.layout.activity_main);
+
+        //  Determine if only one or two panes are visible - as shown in class example code
+        twoPanes = (findViewById(R.id.details_fragment) != null);
 
         //Get Title and Author Resources from XML File
         Resources res = getResources();
@@ -32,24 +37,68 @@ public class MainActivity extends AppCompatActivity
             bookAL.add(new Book(titles[i], authors[i]));
         }
 
-        BookList myBooks = new BookList(this, bookAL);
-        listview = findViewById(R.id.booklist_fragment);
+        myBooks = new BookList(this, bookAL);
+        currBook = myBooks.get(0);
 
         //  Load BookList fragment by default
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.booklist_fragment, BookListFragment.newInstance(myBooks, listview), null);
+        fragmentTransaction.add(R.id.booklist_fragment, BookListFragment.newInstance(myBooks, this), null);
+
+        //Load Details if two panes are present
+        if(twoPanes)
+        {
+            Book currBook = myBooks.get(0);
+            fragmentTransaction.add(R.id.details_fragment, BookDetailsFragment.newInstance(currBook));
+        }
+
         fragmentTransaction.commit();
     }
 
-
-    private void doTransition()
+    public void selectBook(int position)
     {
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.booklist_fragment, new BookListFragment())
-                .addToBackStack(null)
-                .commit();
+        currBook = myBooks.get(position);
+
+        //If we only have one pane, we replace the list
+        if(!twoPanes)
+        {
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.booklist_fragment, BookDetailsFragment.newInstance(currBook))
+                    .addToBackStack(null)
+                    .commit();
+        }
+        else //Otherwise we replace the existing details fragment
+        {
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.details_fragment, BookDetailsFragment.newInstance(currBook))
+                    .addToBackStack(null)
+                    .commit();
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            twoPanes = true;
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.details_fragment, BookDetailsFragment.newInstance(currBook))
+                    .addToBackStack(null)
+                    .commit();
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            twoPanes = false;
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.booklist_fragment, BookDetailsFragment.newInstance(currBook))
+                    .addToBackStack(null)
+                    .commit();
+        }
+
     }
 
 }

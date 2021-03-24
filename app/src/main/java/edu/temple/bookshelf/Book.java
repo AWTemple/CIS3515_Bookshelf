@@ -7,7 +7,7 @@ import android.os.Parcelable;
 //arguments to fragments. You can see the advice I got here:
 //https://stackoverflow.com/questions/35247641/instantiate-a-fragment-with-a-custom-object-array-list/35248184
 
-public class Book implements Parcelable
+public class Book
 {
     private String title, author;
 
@@ -23,35 +23,5 @@ public class Book implements Parcelable
 
     public String getAuthor() { return author; }
 
-    @Override
-    public int describeContents()
-    {
-        return 0;
-    }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags)
-    {
-        dest.writeString(title);
-        dest.writeString(author);
-    }
-
-    public static final Creator<Book> CREATOR = new Creator<Book>()
-    {
-
-        @Override
-        public Book createFromParcel(Parcel in)
-        {
-            String title = in.readString();
-            String author = in.readString();
-
-            return new Book(title, author);
-        }
-
-        @Override
-        public Book[] newArray(int size)
-        {
-            return new Book[size];
-        }
-    };
 }
