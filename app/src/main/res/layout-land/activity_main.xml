@@ -7,14 +7,14 @@
 
     <FrameLayout
         android:id="@+id/booklist_fragment"
-        android:layout_weight="0.3"
+        android:layout_weight="0.5"
         android:layout_width="0dp"
         android:layout_height="match_parent" />
 
     <FrameLayout
         android:id="@+id/details_fragment"
         android:layout_width="0dp"
-        android:layout_weight="0.7"
+        android:layout_weight="0.5"
         android:layout_height="match_parent" />
 
 </LinearLayout>

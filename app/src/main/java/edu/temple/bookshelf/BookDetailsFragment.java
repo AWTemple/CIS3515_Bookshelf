@@ -33,7 +33,8 @@ public class BookDetailsFragment extends Fragment
 
     public void displayBook(Book book)
     {
-        if (title != null && author != null)
+        this.book = book;
+        if (title != null && author != null && book != null)
         {
             title.setText(book.getTitle());
             author.setText(book.getAuthor());

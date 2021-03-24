@@ -17,14 +17,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:textSize="44dp" />
+        android:textSize="36dp" />
 
     <TextView
         android:id="@+id/author"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
         android:layout_centerHorizontal="true"
-        android:textSize="36dp" />
+        android:textSize="24dp" />
 
 
 </FrameLayout>
