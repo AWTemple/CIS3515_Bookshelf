@@ -10,12 +10,15 @@ public class Book
 
     public Book(){};
 
-    public Book(String title, String author, String coverURL)
+    public Book(int id, String title, String author, String coverURL)
     {
+        this.id = id;
         this.title = title;
         this.author = author;
         this.coverURL = coverURL;
     }
+
+    public int getId() { return id; }
 
     public String getTitle() { return title; }
 

@@ -1,23 +1,35 @@
 package edu.temple.bookshelf;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.res.Configuration;
-import android.content.res.Resources;
+import android.app.Activity;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.ArrayList;
-
-public class BookSearchActivity extends AppCompatActivity
-{
+public class BookSearchActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_search_activity);
+
+        EditText searchBox = findViewById(R.id.searchBox);
+        Button searchButton = findViewById(R.id.commenceSearch);
+
+        searchButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                String response = searchBox.getText().toString();
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("response", response);
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
+            }
+        });
     }
 }
