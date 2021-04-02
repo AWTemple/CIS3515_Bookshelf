@@ -3,17 +3,14 @@ package edu.temple.bookshelf;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-//I referred to some posts on stack overflow to implement parcelable for ease of passing
-//arguments to fragments. You can see the advice I got here:
-//https://stackoverflow.com/questions/35247641/instantiate-a-fragment-with-a-custom-object-array-list/35248184
-
 public class Book
 {
-    private String title, author;
+    private String title, author, coverURL;
+    private int id;
 
     public Book(){};
 
-    public Book(String title, String author)
+    public Book(String title, String author, String coverURL)
     {
         this.title = title;
         this.author = author;
@@ -23,5 +20,6 @@ public class Book
 
     public String getAuthor() { return author; }
 
+    public String getCoverURL() { return coverURL; }
 
 }

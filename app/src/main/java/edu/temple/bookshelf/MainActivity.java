@@ -29,14 +29,16 @@ public class MainActivity extends AppCompatActivity
 
         //Get Title and Author Resources from XML File
         Resources res = getResources();
-        String[] titles = res.getStringArray(R.array.book_titles);
-        String[] authors = res.getStringArray(R.array.authors);
+        String[] titles = {"title 1", "title 2"};
+        String[] authors = {"author 1", "author 2"};
+        String[] covers = {"https://www.simplifiedcoding.net/wp-content/uploads/2015/10/advertise.png",
+                            "https://www.simplifiedcoding.net/wp-content/uploads/2015/10/advertise.png"};
 
         //Instantiate BookList Containing Titles and Authors
         ArrayList<Book> bookAL = new ArrayList<Book>();
         for(int i = 0; i < titles.length; i++)
         {
-            bookAL.add(new Book(titles[i], authors[i]));
+            bookAL.add(new Book(titles[i], authors[i], covers[i]));
         }
 
         myBooks = new BookList(this, bookAL);

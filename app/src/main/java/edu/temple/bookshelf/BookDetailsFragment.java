@@ -1,17 +1,20 @@
 package edu.temple.bookshelf;
 
 import android.app.Fragment;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
+import android.widget.ImageView;
 import android.widget.TextView;
+import com.squareup.picasso.Picasso;
 
 public class BookDetailsFragment extends Fragment
 {
     private Book book;
     TextView title, author;
+    ImageView cover;
 
     public BookDetailsFragment()
     {
@@ -39,10 +42,16 @@ public class BookDetailsFragment extends Fragment
     public void displayBook(Book book)
     {
         this.book = book;
-        if (title != null && author != null && book != null)
+        if (title != null && author != null && cover != null && book != null)
         {
             title.setText(book.getTitle());
             author.setText(book.getAuthor());
+
+            try
+            {
+                Picasso.get().load(book.getCoverURL()).into(cover);
+            }
+            catch(Exception e){ e.printStackTrace(); }
         }
     }
 
@@ -58,6 +67,11 @@ public class BookDetailsFragment extends Fragment
         View v = inflater.inflate(R.layout.details_fragment, null);
         title = v.findViewById(R.id.bigtitle);
         author = v.findViewById(R.id.bigauthor);
+        cover = (ImageView)v.findViewById(R.id.bookCover);
+
+        if(cover != null)
+            cover.setImageResource(R.drawable.placeholder);
+
         if(this.book != null)
             this.displayBook(this.book);
 
