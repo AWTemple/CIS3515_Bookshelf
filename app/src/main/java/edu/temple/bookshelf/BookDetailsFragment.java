@@ -49,7 +49,7 @@ public class BookDetailsFragment extends Fragment
 
             try
             {
-                Picasso.get().load(book.getCoverURL()).into(cover);
+                Picasso.get().load(Uri.parse(book.getCoverURL())).placeholder(R.drawable.placeholder).into(cover);
             }
             catch(Exception e){ e.printStackTrace(); }
         }

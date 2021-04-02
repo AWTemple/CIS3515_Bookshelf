@@ -14,6 +14,7 @@ public class Book
     {
         this.title = title;
         this.author = author;
+        this.coverURL = coverURL;
     }
 
     public String getTitle() { return title; }
