@@ -60,15 +60,13 @@ public class MainActivity extends AppCompatActivity {
         currBook = null;
 
         //Load booklist fragment and control by default
+        loadFragment(R.id.control_fragment, ControlFragment.newInstance(), false);
         loadFragment(R.id.booklist_fragment, BookListFragment.newInstance(myBooks, this), false);
 
         //If two panes, load details fragment as well
-        currDetails = BookDetailsFragment.newInstance(currBook);
+        currDetails = BookDetailsFragment.newInstance(currBook, this);
         if (twoPanes)
             loadFragment(R.id.details_fragment, currDetails, false);
-
-        //Use our trusty setupButton Method to set up the onclick listener
-        setupButton();
 
         //We'll use the SharedPreferences API to store our search term in case of restart
         prefs = this.getSharedPreferences("edu.temple.bookshelf", Context.MODE_PRIVATE);
@@ -77,19 +75,6 @@ public class MainActivity extends AppCompatActivity {
         //Use our updateBookList Method to set the BookList to make an initial query
         updateBookList(searchTerm);
 
-    }
-
-    //SetupButton is called onCreate and onConfigChange because the button ID Changes
-    private void setupButton() {
-        //Set up our onclick listener for our searchbutton
-        searchButton = findViewById(R.id.search);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                StartBookSearch();
-            }
-        });
     }
 
     public void StartBookSearch() {
@@ -105,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
         //If details fragment is not visible, we replace the booklist fragment
         if (!twoPanes) {
-            Fragment newFrag = BookDetailsFragment.newInstance(currBook);
+            Fragment newFrag = BookDetailsFragment.newInstance(currBook, this);
             currDetails = (BookDetailsFragment) newFrag;
             loadFragment(R.id.booklist_fragment, newFrag, true);
         } else //Otherwise we simply ask details fragment to update its book
@@ -131,13 +116,11 @@ public class MainActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         setContentView(R.layout.activity_main);
+        loadFragment(R.id.control_fragment, ControlFragment.newInstance(), false);
         twoPanes = (findViewById(R.id.details_fragment) != null);
 
-        //Reset our search button (It's different in different configs
-        setupButton();
-
         //Declare new instances because orientation changes cause massive glitches for some reason
-        currDetails = BookDetailsFragment.newInstance(currBook);
+        currDetails = BookDetailsFragment.newInstance(currBook, this);
         Fragment list = BookListFragment.newInstance(myBooks, this);
 
         //Switch to Landscape
@@ -169,6 +152,15 @@ public class MainActivity extends AppCompatActivity {
                 updateBookList(searchTerm);
             }
         }
+    }
+
+    public void playThisBook()
+    {
+        //Button is visible before book is selected, deal with null reference
+        if(currBook == null)
+            return;
+
+
     }
 
     private void updateBookList(String searchTerm) {

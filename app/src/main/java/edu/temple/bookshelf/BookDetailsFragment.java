@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
@@ -13,8 +14,10 @@ import com.squareup.picasso.Picasso;
 public class BookDetailsFragment extends Fragment
 {
     private Book book;
-    TextView title, author;
-    ImageView cover;
+    private TextView title, author;
+    private ImageView cover;
+    private MainActivity parentAct;
+    private Button button;
 
     public BookDetailsFragment()
     {
@@ -26,10 +29,11 @@ public class BookDetailsFragment extends Fragment
         return new BookDetailsFragment();
     }
 
-    public static BookDetailsFragment newInstance(Book book)
+    public static BookDetailsFragment newInstance(Book book, MainActivity parent)
     {
         BookDetailsFragment myfrag = new BookDetailsFragment();
         myfrag.book = book;
+        myfrag.parentAct = parent;
         myfrag.displayBook(myfrag.book);
         return myfrag;
     }
@@ -68,12 +72,22 @@ public class BookDetailsFragment extends Fragment
         title = v.findViewById(R.id.bigtitle);
         author = v.findViewById(R.id.bigauthor);
         cover = (ImageView)v.findViewById(R.id.bookCover);
+        button = v.findViewById(R.id.playThisBook);
 
         if(cover != null)
             cover.setImageResource(R.drawable.placeholder);
 
         if(this.book != null)
             this.displayBook(this.book);
+
+        button.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                parentAct.playThisBook();
+            }
+        });
 
         return v;
     }

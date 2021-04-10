@@ -1,7 +1,11 @@
 <resources>
     <string name="app_name">BookShelf</string>
     <string name="search_default">Enter a search term</string>
-    <string name="button_text">Search</string>
+    <string name="search_button_text">Search</string>
     <string name="base_url">https://kamorris.com/lab/cis3515/search.php?term=</string>
-    <string name="now_playing">Now Playing: </string>
+    <string name="now_playing_header">Now Playing: </string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="stop">Stop</string>
+    <string name="change_book_button">Play This Book</string>
 </resources>

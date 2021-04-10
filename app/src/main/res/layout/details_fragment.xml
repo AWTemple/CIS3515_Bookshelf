@@ -14,17 +14,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="62dp"
             android:id="@+id/bigtitle"
             android:gravity="center_horizontal"
-            android:textSize="35sp"/>
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:id="@+id/bookCover"
-            android:gravity="center_horizontal" />
+            android:textSize="25sp"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -32,7 +25,23 @@
             android:layout_marginTop="5dp"
             android:id="@+id/bigauthor"
             android:gravity="center_horizontal"
-            android:textSize="25sp"/>
+            android:textSize="18sp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:id="@+id/playThisBook"
+            android:text="@string/change_book_button"
+            android:layout_gravity="center_horizontal"
+            android:textSize="18sp"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:id="@+id/bookCover"
+            android:gravity="center_horizontal" />
 
     </LinearLayout>
 
