@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         myBooks = new BookList(this, bookAL);
         currBook = null;
 
-        //Load booklist fragment by default
+        //Load booklist fragment and control by default
         loadFragment(R.id.booklist_fragment, BookListFragment.newInstance(myBooks, this), false);
 
         //If two panes, load details fragment as well

@@ -3,4 +3,5 @@
     <string name="search_default">Enter a search term</string>
     <string name="button_text">Search</string>
     <string name="base_url">https://kamorris.com/lab/cis3515/search.php?term=</string>
+    <string name="now_playing">Now Playing: </string>
 </resources>

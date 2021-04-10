@@ -6,7 +6,7 @@ import android.os.Parcelable;
 public class Book
 {
     private String title, author, coverURL;
-    private int id;
+    private int id, duration;
 
     public Book(){};
 
