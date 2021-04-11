@@ -3,8 +3,10 @@ package edu.temple.bookshelf;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -12,6 +14,10 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.Fragment;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
 import android.view.View;
 import android.widget.Button;
 
@@ -27,17 +33,21 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import edu.temple.audiobookplayer.AudiobookService;
+
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<Book> bookAL;
-    BookList myBooks;
-    boolean twoPanes;
-    Book currBook;
-    BookDetailsFragment currDetails;
-    Button searchButton;
-    String baseURL;
-    RequestQueue requestQueue;
-    SharedPreferences prefs;
+    private ArrayList<Book> bookAL;
+    private BookList myBooks;
+    private boolean twoPanes;
+    private Book currBook, playBook;
+    private BookDetailsFragment currDetails;
+    private ControlFragment controls;
+    private String baseURL;
+    private RequestQueue requestQueue;
+    private SharedPreferences prefs;
+    private AudiobookService.MediaControlBinder abService;
+    public ServiceConnection myConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +70,8 @@ public class MainActivity extends AppCompatActivity {
         currBook = null;
 
         //Load booklist fragment and control by default
-        loadFragment(R.id.control_fragment, ControlFragment.newInstance(), false);
+        controls = ControlFragment.newInstance(this);
+        loadFragment(R.id.control_fragment, controls, false);
         loadFragment(R.id.booklist_fragment, BookListFragment.newInstance(myBooks, this), false);
 
         //If two panes, load details fragment as well
@@ -75,7 +86,27 @@ public class MainActivity extends AppCompatActivity {
         //Use our updateBookList Method to set the BookList to make an initial query
         updateBookList(searchTerm);
 
-    }
+        //Try to set up necessary methods to bind to the audiobook service
+        //I referred to some help on stack overflow for this:
+        //https://stackoverflow.com/questions/8341667/bind-unbind-service-example-android
+
+        myConnection = new ServiceConnection()
+        {
+            public void onServiceConnected(ComponentName className, IBinder binder)
+            {
+                abService = (AudiobookService.MediaControlBinder)binder;
+            }
+
+            public void onServiceDisconnected(ComponentName className) {
+                abService = null;
+            }
+        };
+
+        Intent intent = null;
+        intent = new Intent(this, AudiobookService.class);
+        bindService(intent, myConnection, Context.BIND_AUTO_CREATE);
+
+    } // End of onCreate()--------------------------------------------------------------------------
 
     public void StartBookSearch() {
         Intent intent = new Intent(this, BookSearchActivity.class);
@@ -116,7 +147,8 @@ public class MainActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         setContentView(R.layout.activity_main);
-        loadFragment(R.id.control_fragment, ControlFragment.newInstance(), false);
+        controls = ControlFragment.newInstance(this);
+        loadFragment(R.id.control_fragment, controls, false);
         twoPanes = (findViewById(R.id.details_fragment) != null);
 
         //Declare new instances because orientation changes cause massive glitches for some reason
@@ -160,7 +192,10 @@ public class MainActivity extends AppCompatActivity {
         if(currBook == null)
             return;
 
+        playBook = currBook;
 
+        controls.setPlayBook(playBook);
+        abService.play(playBook.getId());
     }
 
     private void updateBookList(String searchTerm) {

@@ -29,12 +29,33 @@ public class ControlFragment extends Fragment
         return myfrag;
     }
 
-    public static ControlFragment newInstance(Book book, MainActivity parent) {
+    public static ControlFragment newInstance(MainActivity parent) {
         ControlFragment myfrag = new ControlFragment();
-        myfrag.currBook = book;
         myfrag.playing = true;
         myfrag.parentAct = parent;
         return myfrag;
+    }
+
+    public void setPlayBook(Book book)
+    {
+        currBook = book;
+        updateHeader();
+    }
+
+    private void updateHeader()
+    {
+        String header = getString(R.string.now_playing_header);
+
+        if(currBook != null)
+            header += currBook.getTitle();
+
+        if(nowPlaying != null)
+            nowPlaying.setText(header);
+    }
+
+    private void playPause()
+    {
+
     }
 
     @Override
@@ -44,17 +65,30 @@ public class ControlFragment extends Fragment
         View v = inflater.inflate(R.layout.control_fragment, null);
 
         nowPlaying = v.findViewById(R.id.nowPlaying);
-        String header = getString(R.string.now_playing_header);
-        if(currBook != null)
-            header += currBook.getTitle();
-        nowPlaying.setText(header);
+        updateHeader();
 
+        //Set up Listener for play/pause button
         playPause = v.findViewById(R.id.playPause);
-        if(playing)
-            playPause.setText(R.string.play);
-        else
-            playPause.setText(R.string.pause);
+        playPause.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                playPause();
+            }
+        });
 
+        stop = v.findViewById(R.id.stop);
+        stop.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                parentAct.stopBook();
+            }
+        });
+
+        //Set up Listener for Search
         search = v.findViewById(R.id.search);
         search.setOnClickListener(new View.OnClickListener()
         {
