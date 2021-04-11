@@ -10,12 +10,13 @@ public class Book
 
     public Book(){};
 
-    public Book(int id, String title, String author, String coverURL)
+    public Book(int id, String title, String author, String coverURL, int duration)
     {
         this.id = id;
         this.title = title;
         this.author = author;
         this.coverURL = coverURL;
+        this.duration = duration;
     }
 
     public int getId() { return id; }
@@ -25,5 +26,7 @@ public class Book
     public String getAuthor() { return author; }
 
     public String getCoverURL() { return coverURL; }
+
+    public int getDuration() { return duration; }
 
 }

@@ -31,7 +31,7 @@ public class ControlFragment extends Fragment
 
     public static ControlFragment newInstance(MainActivity parent) {
         ControlFragment myfrag = new ControlFragment();
-        myfrag.playing = true;
+        myfrag.playing = false;
         myfrag.parentAct = parent;
         return myfrag;
     }
@@ -39,6 +39,14 @@ public class ControlFragment extends Fragment
     public void setPlayBook(Book book)
     {
         currBook = book;
+
+        if(currBook != null)
+            playing = true;
+        else
+            playing = false;
+
+        buttonTextSwitch();
+
         updateHeader();
     }
 
@@ -55,7 +63,21 @@ public class ControlFragment extends Fragment
 
     private void playPause()
     {
+        playing = !playing;
+        buttonTextSwitch();
 
+        parentAct.pause(); //Pause handles the logic for if already paused or not
+    }
+
+    private void buttonTextSwitch()
+    {
+        if(playPause == null)
+            return;
+
+        if(playing)
+            playPause.setText(R.string.pause);
+        else
+            playPause.setText(R.string.play);
     }
 
     @Override
@@ -69,6 +91,7 @@ public class ControlFragment extends Fragment
 
         //Set up Listener for play/pause button
         playPause = v.findViewById(R.id.playPause);
+        buttonTextSwitch();
         playPause.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -84,7 +107,7 @@ public class ControlFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-                parentAct.stopBook();
+                parentAct.stop();
             }
         });
 
